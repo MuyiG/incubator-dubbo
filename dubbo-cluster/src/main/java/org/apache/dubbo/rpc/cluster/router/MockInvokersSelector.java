@@ -40,13 +40,18 @@ public class MockInvokersSelector implements Router {
             return getNormalInvokers(invokers);
         } else {
             String value = invocation.getAttachments().get(Constants.INVOCATION_NEED_MOCK);
-            if (value == null)
+            if (value == null) {
                 return getNormalInvokers(invokers);
-            else if (Boolean.TRUE.toString().equalsIgnoreCase(value)) {
+            } else if (Boolean.TRUE.toString().equalsIgnoreCase(value)) {
                 return getMockedInvokers(invokers);
             }
         }
         return invokers;
+    }
+
+    @Override
+    public int getPriority() {
+        return Integer.MAX_VALUE;
     }
 
     private <T> List<Invoker<T>> getMockedInvokers(final List<Invoker<T>> invokers) {
