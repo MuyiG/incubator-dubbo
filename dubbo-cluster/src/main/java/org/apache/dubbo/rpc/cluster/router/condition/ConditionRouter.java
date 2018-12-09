@@ -40,9 +40,8 @@ import java.util.regex.Pattern;
 
 /**
  * ConditionRouter
- *
  */
-public class ConditionRouter implements Router, Comparable<Router> {
+public class ConditionRouter implements Router {
 
     private static final Logger logger = LoggerFactory.getLogger(ConditionRouter.class);
     private static Pattern ROUTE_PATTERN = Pattern.compile("([&!=,]*)\\s*([^&!=,\\s]+)");
@@ -105,33 +104,36 @@ public class ConditionRouter implements Router, Comparable<Router> {
             }
             // The Value in the KV part.
             else if ("=".equals(separator)) {
-                if (pair == null)
+                if (pair == null) {
                     throw new ParseException("Illegal route rule \""
                             + rule + "\", The error char '" + separator
                             + "' at index " + matcher.start() + " before \""
                             + content + "\".", matcher.start());
+                }
 
                 values = pair.matches;
                 values.add(content);
             }
             // The Value in the KV part.
             else if ("!=".equals(separator)) {
-                if (pair == null)
+                if (pair == null) {
                     throw new ParseException("Illegal route rule \""
                             + rule + "\", The error char '" + separator
                             + "' at index " + matcher.start() + " before \""
                             + content + "\".", matcher.start());
+                }
 
                 values = pair.mismatches;
                 values.add(content);
             }
             // The Value in the KV part, if Value have more than one items.
             else if (",".equals(separator)) { // Should be seperateed by ','
-                if (values == null || values.isEmpty())
+                if (values == null || values.isEmpty()) {
                     throw new ParseException("Illegal route rule \""
                             + rule + "\", The error char '" + separator
                             + "' at index " + matcher.start() + " before \""
                             + content + "\".", matcher.start());
+                }
                 values.add(content);
             } else {
                 throw new ParseException("Illegal route rule \"" + rule
@@ -175,17 +177,13 @@ public class ConditionRouter implements Router, Comparable<Router> {
     }
 
     @Override
-    public URL getUrl() {
-        return url;
+    public int getPriority() {
+        return priority;
     }
 
     @Override
-    public int compareTo(Router o) {
-        if (o == null || o.getClass() != ConditionRouter.class) {
-            return 1;
-        }
-        ConditionRouter c = (ConditionRouter) o;
-        return this.priority == c.priority ? url.toFullString().compareTo(c.url.toFullString()) : (this.priority > c.priority ? 1 : -1);
+    public URL getUrl() {
+        return url;
     }
 
     boolean matchWhen(URL url, Invocation invocation) {

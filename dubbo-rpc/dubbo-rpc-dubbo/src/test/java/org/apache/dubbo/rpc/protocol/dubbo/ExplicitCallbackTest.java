@@ -49,6 +49,7 @@ public class ExplicitCallbackTest {
     @After
     public void tearDown() {
         destroyService();
+        ProtocolUtils.closeAll();
     }
 
     public void exportService() {
@@ -122,7 +123,7 @@ public class ExplicitCallbackTest {
 
     @Test
     public void TestCallbackMultiInstans() throws Exception {
-        initOrResetUrl(2, 1000);
+        initOrResetUrl(2, 3000);
         initOrResetService();
         IDemoCallback callback = new IDemoCallback() {
             public String yyy(String msg) {
@@ -143,14 +144,13 @@ public class ExplicitCallbackTest {
             Thread.sleep(500);
             demoProxy.unxxx2(callback);
             Assert.assertEquals(0, demoProxy.getCallbackCount());
-            System.out.println("");
 
             demoProxy.xxx2(callback2);
             Assert.assertEquals(1, demoProxy.getCallbackCount());
             Thread.sleep(500);
             demoProxy.unxxx2(callback2);
             Assert.assertEquals(0, demoProxy.getCallbackCount());
-            System.out.println("");
+
             demoProxy.xxx2(callback);
             Thread.sleep(500);
             Assert.assertEquals(1, demoProxy.getCallbackCount());
