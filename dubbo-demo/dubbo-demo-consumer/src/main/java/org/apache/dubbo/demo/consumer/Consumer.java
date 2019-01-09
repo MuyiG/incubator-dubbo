@@ -18,6 +18,7 @@ package org.apache.dubbo.demo.consumer;
 
 import org.apache.dubbo.demo.DemoService;
 
+import org.apache.dubbo.demo.SubModel;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Consumer {
@@ -36,6 +37,9 @@ public class Consumer {
 //                Thread.sleep(1000);
                 String hello = demoService.sayHello("world"); // call remote method
                 System.out.println(hello); // get result
+
+        SubModel<String> subModel = demoService.getSubModel();
+        System.out.println(subModel.getData());
 //            } catch (Throwable throwable) {
 //                throwable.printStackTrace();
 //            }
