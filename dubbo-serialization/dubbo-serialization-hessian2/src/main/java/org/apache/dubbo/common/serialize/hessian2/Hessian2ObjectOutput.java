@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Hessian2 Object output.
+ * Hessian2 object output implementation
  */
 public class Hessian2ObjectOutput implements ObjectOutput {
     private final Hessian2Output mH2o;
@@ -92,5 +92,9 @@ public class Hessian2ObjectOutput implements ObjectOutput {
     @Override
     public void flushBuffer() throws IOException {
         mH2o.flushBuffer();
+    }
+
+    public OutputStream getOutputStream() throws IOException {
+        return mH2o.getBytesOutputStream();
     }
 }
